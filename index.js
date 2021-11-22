@@ -49,14 +49,14 @@ app.post('/create-alternative', (req, res) => {
 });
 
 app.get('/get-alternatives', (req, res) => {
-    // const {id_poll} = req.body;
-    // db.getAlternatives(id_poll, function (err, data) {
-    //     if (err) {
-    //         console.error(err);
-    //     } else {
-    //         res.send(data);
-    //     }
-    // });
+    const {id_poll} = req.body;
+    db.getAlternatives(id_poll, function (err, data) {
+        if (err) {
+            console.error(err);
+        } else {
+            res.send(data);
+        }
+    });
 })
 
 app.get('/get-polls', (req, res) => {

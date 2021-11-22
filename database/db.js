@@ -100,15 +100,15 @@ const createAlternative = (dataAlternative) => {
     });
 }
 
-const getAlternatives = (idPoll, username, token, callback) => {
-    // const sql = `SELECT * FROM alternative WHERE id_poll=${idPoll};`;
+const getAlternatives = (idPoll, callback) => {
+    const sql = `SELECT * FROM alternative WHERE id_poll=${idPoll};`;
 
-    // con.query(sql, (err, result) => {
-    //     if (err) 
-    //         callback(err, null);
-    //     else
-    //         callback(null, result);
-    // });
+    con.query(sql, (err, result) => {
+        if (err) 
+            callback(err, null);
+        else
+            callback(null, result);
+    });
 };
 
 const getPolls = (username, token, callback) => {
