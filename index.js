@@ -1,9 +1,20 @@
 const express = require('express');
 const db = require('./database/db');
+const cors = require('cors');
 const dataValidation = require('./utils/dataValidation');
 
-const port = 3000;
+
+const port = 5000;
 const app = express();
+
+app.use(require("cors")());
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:3000/create-account"],
+    credentials: true
+  })
+);
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))

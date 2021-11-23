@@ -28,3 +28,9 @@ CREATE TABLE alternative(
     PRIMARY KEY (id_alternative),
     FOREIGN KEY (id_poll) REFERENCES poll(id_poll)
 );
+
+CREATE TABLE visits(
+    id_visitor INT NOT NULL,
+    id_poll INT,
+    FOREIGN KEY (id_poll) REFERENCES poll(id_poll)
+);
