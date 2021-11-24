@@ -1,8 +1,11 @@
 const express = require('express');
 const db = require('./database/db');
 const cors = require('cors');
-const dataValidation = require('./utils/dataValidation');
+const crypto = require('crypto');
 
+const changePassword = require('./services/changePassword');
+
+const dataValidation = require('./utils/dataValidation');
 
 const port = 5000;
 const app = express();
@@ -11,7 +14,7 @@ app.use(require("cors")());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3000/create-account"],
+    origin: ["http://localhost:3000", "http://localhost:3000/create-account", "http://localhost:3000/login"],
     credentials: true
   })
 );
@@ -83,12 +86,43 @@ app.get('/get-polls', (req, res) => {
 });
 
 app.get('/get-user-data', (req, res) => {
-    const {username, token} = req.body;
+    const {username, token} = req.query;
 
     db.getUserData(username, token, (err, data) => {
         if (err) throw err;
-        res.send(data);
+        res.status(200).send(data);
     });
+});
+
+app.post('/change-password', (req, res) => {
+    const {email} = req.body;
+
+    if (email && req.body.id === undefined) {
+        db.verifyEmail(email, (err, result) => {
+            if (err) {
+                res.status(400).send("O email não possui cadastro.");
+            }
+            if (result === true) {
+                res.status(200).send(changePassword.createURL(email));
+            } else {
+                res.status(400).send("O email não possui cadastro.")
+            }
+        })
+    } else if (req.body.id && req.body.password) {
+        const idLink = req.body.id;
+        db.getEmailFromCodLink(idLink, (err, result) => {
+            if (result) {
+                changePassword.changePwd(result.email, req.body.password);
+                db.removeRegisterChangePass(result.email);
+                res.status(200).send("Senha modificada com êxito.");
+            } else {
+                res.status(400).send("Erro ao modificar a senha");
+            }
+        })
+    }
+
+    res.status(400).send("Erro ao modificar a senha");
+
 });
 
 app.listen(port, () => {

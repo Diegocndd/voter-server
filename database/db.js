@@ -50,6 +50,7 @@ const logUser = (login, isLoginEmail = false) => {
         if (err) throw err;
     });
 
+    return token;
 }
 
 const loginUser = (login, password, res) => {
@@ -59,15 +60,17 @@ const loginUser = (login, password, res) => {
     con.query(sqlByUsername, (err, result) => {
         if (err) throw err;
         if (result[0]?.password === password) {
-            logUser(login);
-            res.send('Logged');
+            let token = logUser(login);
+            res.status(200).send(token);
         } else {
             con.query(sqlByEmail, (err, result) => {
                 if (result[0]?.password === password) {
-                    logUser(login, true);
-                    res.send('Logged');
+                    let token = logUser(login, true);
+                    res.status(200).send(token);
                 } else {
-                    res.send('Not logged');
+                    res.status(400).send({
+                        message: 'Não foi possível fazer login',
+                    });
                 }
             })
         }
@@ -79,6 +82,17 @@ const logoutUser = (username) => {
 
     con.query(sql, (err, result) => {
         if (err) throw err;
+    });
+}
+
+const changePassword = (email, newPassword, callback) => {
+    const sql = `UPDATE user SET password='${newPassword}' WHERE email='${email}';`;
+
+    con.query(sql, (err, result) => {
+        if (err) 
+            callback(err, null);
+        else
+            callback(null, result);
     });
 }
 
@@ -144,6 +158,51 @@ const getUserData = (username, token, callback) => {
     });
 };
 
+const addChangePasswordReq = (email, codLink) => {
+    const sql = `INSERT INTO change_password (cod_link, email) VALUES ('${codLink}', '${email}');`
+    con.query(sql, function (err, res) {
+        if (err) throw err;
+    });
+}
+
+// verifica se email existe no banco de dados
+const verifyEmail = (email, callback) => {
+    const sql = `SELECT * FROM user WHERE email='${email}'`;
+
+    con.query(sql, function (err, res) {
+        if (err) {
+            callback(err, false);
+        } else {
+            console.log(res.length);
+            if (res.length > 0) {
+                callback(null, true);
+            } else {
+                callback(err, false);
+            }
+        }
+    });
+}
+
+const getEmailFromCodLink = (idLink, callback) => {
+    const sql = `SELECT email FROM change_password WHERE cod_link='${idLink}';`;
+
+    con.query(sql, function (err, res) {
+        if (err) {
+            callback(err, false);
+        } else {
+            callback(null, res[0]);
+        }
+    });
+}
+
+const removeRegisterChangePass = (email) => {
+    const sql = `DELETE FROM change_password WHERE email='${email}';`;
+
+    con.query(sql, function(err, res) {
+        if (err) throw err;
+    })
+}
+
 module.exports = {
     connect,
     addUser,
@@ -154,4 +213,9 @@ module.exports = {
     getAlternatives,
     getPolls,
     getUserData,
+    changePassword,
+    addChangePasswordReq,
+    verifyEmail,
+    getEmailFromCodLink,
+    removeRegisterChangePass
 };
