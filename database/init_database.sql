@@ -34,3 +34,8 @@ CREATE TABLE visits(
     id_poll INT,
     FOREIGN KEY (id_poll) REFERENCES poll(id_poll)
 );
+
+CREATE TABLE change_password(
+    cod_link VARCHAR(50) NOT NULL,
+    email VARCHAR(70) NOT NULL
+);
