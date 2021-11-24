@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const db = require('../database/db');
+const db = require('../database');
 const generateToken = require('../utils/generateToken');
 
 const transporter = nodemailer.createTransport({
