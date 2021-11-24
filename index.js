@@ -1,11 +1,10 @@
 const express = require('express');
-const db = require('./database/db');
+const db = require('./src/database');
 const cors = require('cors');
 const crypto = require('crypto');
 
-const changePassword = require('./services/changePassword');
-
-const dataValidation = require('./utils/dataValidation');
+const changePassword = require('./src/services/changePassword');
+const dataValidation = require('./src/utils/dataValidation');
 
 const port = 5000;
 const app = express();
