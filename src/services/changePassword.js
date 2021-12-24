@@ -5,14 +5,14 @@ const generateToken = require('../utils/generateToken');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: '',
-    pass: ''
+    user: 'diegocndd4@gmail.com',
+    pass: 'diego306132'
   }
 });
 
 const mailOptions = (email, link) => {
   return {
-    from: '',
+    from: 'diegocndd4@gmail.com',
     to: email,
     subject: 'Alteração de senha - Voter',
     text: `Olá! Acesse o link ${link} para modificar sua senha.`,

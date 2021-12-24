@@ -19,15 +19,7 @@ const register = (userData) => {
 };
 
 const createPoll = (pollData) => {
-    const {type_exhibition, qty_options} = pollData;
-
-    if (type_exhibition !== 'pizza' &&
-        type_exhibition !== 'bar' &&
-        type_exhibition !== 'number' &&
-        type_exhibition !== 'percentage'
-    ) {
-        return false;
-    };
+    const {qty_options} = pollData;
 
     if(!Number.isInteger(qty_options)) {
         return false;

@@ -16,7 +16,6 @@ const verifyEmail = (email, callback) => {
         if (err) {
             callback(err, false);
         } else {
-            console.log(res.length);
             if (res.length > 0) {
                 callback(null, true);
             } else {
@@ -34,7 +33,7 @@ const getEmailFromCodLink = (idLink, callback) => {
         if (err) {
             callback(err, false);
         } else {
-            callback(null, res[0]);
+            callback(null, res[res.length - 1]);
         }
     });
 }

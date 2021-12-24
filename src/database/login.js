@@ -2,41 +2,22 @@ const {con} = require('./config');
 
 const generateToken = require('../utils/generateToken');
 
-const logUser = (login, isLoginEmail = false) => {
-    let sql;
-    const token = generateToken.randomValueHex(15);
-
-    if (isLoginEmail) {
-        sql = `UPDATE user SET logged=${1}, token='${token}' WHERE email='${login}';`;
-    } else {
-        sql = `UPDATE user SET logged=${1}, token='${token}' WHERE username='${login}';`;
-    }
-
-    con.query(sql, (err, result) => {
-        if (err) throw err;
-    });
-
-    return token;
-}
-
-const loginUser = (login, password, res) => {
-    const sqlByUsername = `SELECT password FROM user WHERE username='${login}';`;
-    const sqlByEmail = `SELECT password FROM user WHERE email='${login}';`;
+const loginUser = (login, password, callback) => {
+    const sqlByUsername = `SELECT password, id_user FROM user WHERE username='${login}';`;
+    const sqlByEmail = `SELECT password, id_user FROM user WHERE email='${login}';`;
 
     con.query(sqlByUsername, (err, result) => {
         if (err) throw err;
         if (result[0]?.password === password) {
-            let token = logUser(login);
-            res.status(200).send(token);
+            let id = result[0]?.id_user;
+            callback(null, id);
         } else {
-            con.query(sqlByEmail, (err, result) => {
+            con.query(sqlByEmail, (errEmail, result) => {
                 if (result[0]?.password === password) {
-                    let token = logUser(login, true);
-                    res.status(200).send(token);
+                    let id = result[0]?.id_user;
+                    callback(null, id);
                 } else {
-                    res.status(400).send({
-                        message: 'Não foi possível fazer login',
-                    });
+                    callback(errEmail, null);
                 }
             })
         }
@@ -54,6 +35,4 @@ const logoutUser = (username) => {
 module.exports = {
     logoutUser,
     loginUser,
-    logUser,
-
 }
