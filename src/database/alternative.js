@@ -20,7 +20,19 @@ const getAlternatives = (idPoll, callback) => {
     });
 };
 
+const getAlternativesOfUser = (idPoll, callback) => {
+    const sql = `SELECT * FROM alternative WHERE id_poll=${idPoll};`;
+
+    con.query(sql, (err, result) => {
+        if (err) 
+            callback(err, null);
+        else
+            callback(null, result);
+    });
+};
+
 module.exports = {
     createAlternative,
     getAlternatives,
+    getAlternativesOfUser,
 };
