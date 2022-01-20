@@ -8,15 +8,28 @@ const isEmailValid = (email) => {
     return false;
 }
 
-const register = (userData) => {
-    const {name, surname, username, birth, email, password} = userData;
+const isPasswordValid = (password) => {
+    return password.length >= 6;
+}
+
+const isBirthValid = (birth) => {
     const regEx = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 
-    if (password.length < 6) {
+    if (birth.match(regEx)) {
+        return true;
+    }
+
+    return false;
+}
+
+const register = (userData) => {
+    const {name, surname, username, birth, email, password} = userData;
+
+    if (!isPasswordValid(password)) {
         return "The password cannot be shorter than 6 characters.";
     }
 
-    if (!birth.match(regEx)) {
+    if (!isBirthValid(birth)) {
         return "The date format does not match the YYYY-MM-DD format.";
     }
 
@@ -40,4 +53,7 @@ const createPoll = (pollData) => {
 module.exports = {
     register,
     createPoll,
+    isEmailValid,
+    isBirthValid,
+    isPasswordValid,
 };
