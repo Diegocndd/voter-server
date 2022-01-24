@@ -271,6 +271,6 @@ app.get('/is-closed-poll', (req, res) => {
 });
 
 app.listen(port, () => {
-    db.connect();
+    // db.connect();
     console.log('Servidor rodando na porta ' + port);
 });
