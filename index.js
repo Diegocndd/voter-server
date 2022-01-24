@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const db = require('./src/database');
 const cors = require('cors');
@@ -8,8 +9,9 @@ const authMiddleware = require('./src/middlewares/auth');
 const changePassword = require('./src/services/changePassword');
 const dataValidation = require('./src/utils/dataValidation');
 
-const port = 5000;
 const app = express();
+
+const port = process.env.PORT || 5000;
 
 app.use(require("cors")());
 
