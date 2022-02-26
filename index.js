@@ -146,6 +146,7 @@ app.get('/get-polls', (req, res) => {
 
 app.get('/get-poll', (req, res) => {
     let {id_poll} = req.query;
+
     db.getPoll(id_poll, function (err, data) {
         if (err) {
             console.error(err);

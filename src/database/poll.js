@@ -50,7 +50,8 @@ const isPollClosed = (idPoll, callback) => {
 
 const deletePoll = (idUser, idPoll, callback) => {
     const sql = `DELETE FROM poll WHERE id_poll=${idPoll} AND id_user=${idUser};`;
-
+    const sql2 = `DELETE FROM alternative WHERE id_poll=${idPoll};`;
+    con.query(sql2);
     releaseForeignKey();
     con.query(sql, (err, result) => {
         if (err) callback(err, null);
