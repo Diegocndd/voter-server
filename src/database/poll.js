@@ -3,7 +3,7 @@ const {con} = require('./config');
 const createPoll = (dataPoll, callback) => {
     const {id_user, title, public, limit_date, qty_options, color} = dataPoll;
     const sql = `INSERT INTO poll (id_user, title, limit_date, public, qty_options, color) VALUES (${id_user}, '${title ? title : null}', '${limit_date ? limit_date : null}', ${public}, ${qty_options}, '${color}');`;
-    console.log(dataPoll);
+
     con.query(sql, (err, result) => {
         if (err) throw callback(err, null);
         else callback(null, result.insertId)

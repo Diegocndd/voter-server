@@ -17,7 +17,7 @@ app.use(require("cors")());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3000/create-account", "http://localhost:3000/login", "http://localhost:3000/forgot-password"],
+    origin: [`${process.env.BASE_URL}`, `${process.env.BASE_URL}create-account`, `${process.env.BASE_URL}login`, `${process.env.BASE_URL}forgot-password`],
     credentials: true
   })
 );
